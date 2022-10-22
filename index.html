@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<style>
+    /* Indigo Light scheme (Default) */
+    /* Can be forced with data-theme="light" */
+    [data-theme="light"],
+    :root:not([data-theme="dark"]) {
+        --primary: #3949ab;
+        --primary-hover: #303f9f;
+        --primary-focus: rgba(57, 73, 171, 0.125);
+        --primary-inverse: #FFF;
+    }
+
+    /* Indigo Dark scheme (Auto) */
+    /* Automatically enabled if user has Dark mode enabled */
+    @media only screen and (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --primary: #3949ab;
+            --primary-hover: #3f51b5;
+            --primary-focus: rgba(57, 73, 171, 0.25);
+            --primary-inverse: #FFF;
+        }
+    }
+
+    /* Indigo Dark scheme (Forced) */
+    /* Enabled if forced with data-theme="dark" */
+    [data-theme="dark"] {
+        --primary: #3949ab;
+        --primary-hover: #3f51b5;
+        --primary-focus: rgba(57, 73, 171, 0.25);
+        --primary-inverse: #FFF;
+    }
+
+    /* Indigo (Common styles) */
+    :root {
+        --form-element-active-border-color: var(--primary);
+        --form-element-focus-color: var(--primary-focus);
+        --switch-color: var(--primary-inverse);
+        --switch-checked-background-color: var(--primary);
+    }
+
+    .fullscreen {
+        width: 90vw;
+        height: 90vh;
+        /* padding: 40vh; */
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div x-data="questions">
+            <div class="grid">
+                <template x-for="q in questions" :key="q.id">
+                    <div>
+                        <article>
+                            <header class="category">
+                                <strong x-text="q.category"></strong>
+                            </header>
+                            <blockquote>
+                                <em x-text="q.question"></em>
+                            </blockquote>
+                        </article>
+                    </div>
+                </template>
+            </div>
+            <div>
+                <button @click="getData()">Randomize</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('questions', () => ({
+            async init() {
+                await this.getData();
+            },
+            questions: [],
+            async getData() {
+                const response = await fetch('questions.json');
+                if (!response.ok) alert(`Something went wrong: ${response.status} - ${response.statusText}`);
+                const data = await response.json();
+                this.questions = shuffle(data).slice(0, 3);
+            }
+        }))
+    })
+
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    const front = document.getElementById('front')
+    const back = document.getElementById('back')
+    const btn = document.getElementById('flip-btn')
+
+    function handleFlip() {
+        front.classList.toggle('flipped')
+        back.classList.toggle('flipped')
+    }
+
+    btn.addEventListener('click', handleFlip)
+</script>
