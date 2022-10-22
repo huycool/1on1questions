@@ -88,15 +88,16 @@
             async init() {
                 await this.getData();
             },
+            loadedData: [],
             questions: [],
             async getData() {
-                if(this.questions.length == 0){
+                if (this.loadedData.length == 0) {
                     const response = await fetch('questions.json');
                     if (!response.ok) alert(`Something went wrong: ${response.status} - ${response.statusText}`);
-                    this.questions = await response.json();                    
+                    this.loadedData = await response.json();
                 }
-
-                this.questions = shuffle(this.questions).slice(0, 3);
+                this.questions = shuffle(this.loadedData);
+                this.questions = this.questions.slice(0, 3);
             }
         }))
     })
