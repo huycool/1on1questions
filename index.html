@@ -87,7 +87,8 @@
             async getData() {
                 if (this.loadedData.length == 0) {
                     const response = await fetch('questions.json');
-                    if (!response.ok) alert(`Something went wrong: ${response.status} - ${response.statusText}`);
+                    if (!response.ok)
+                        alert(`Something went wrong: ${response.status} - ${response.statusText}`);
                     this.loadedData = await response.json();
                 }
                 this.questions = shuffle(this.loadedData);
