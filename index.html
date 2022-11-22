@@ -5,65 +5,176 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1on1 Questions</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <title>1on1 Questions</title>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <style>
-    /* Indigo Light scheme (Default) */
-    /* Can be forced with data-theme="light" */
-    [data-theme="light"],
-    :root:not([data-theme="dark"]) {
-        --primary: #3949ab;
-        --primary-hover: #303f9f;
-        --primary-focus: rgba(57, 73, 171, 0.125);
-        --primary-inverse: #FFF;
+    * {
+        user-select: none;
     }
 
-    /* Indigo Dark scheme (Auto) */
-    /* Automatically enabled if user has Dark mode enabled */
-    @media only screen and (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-            --primary: #3949ab;
-            --primary-hover: #3f51b5;
-            --primary-focus: rgba(57, 73, 171, 0.25);
-            --primary-inverse: #FFF;
-        }
+    .container {
+        width: 500px;
+        height: 1000px;
+        perspective: 800px;
     }
 
-    /* Indigo Dark scheme (Forced) */
-    /* Enabled if forced with data-theme="dark" */
-    [data-theme="dark"] {
-        --primary: #3949ab;
-        --primary-hover: #3f51b5;
-        --primary-focus: rgba(57, 73, 171, 0.25);
-        --primary-inverse: #FFF;
+    header,
+    p {
+        text-align: center;
+        font: 30px Calibri Light;
     }
 
-    /* Indigo (Common styles) */
-    :root {
-        --form-element-active-border-color: var(--primary);
-        --form-element-focus-color: var(--primary-focus);
-        --switch-color: var(--primary-inverse);
-        --switch-checked-background-color: var(--primary);
+
+    #acard {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        transition: transform 1s;
+        transform-origin: right center;
+    }
+
+    #acard div {
+        display: block;
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        backface-visibility: hidden;
+    }
+
+    #acard .front {
+        background: #ffe49e;
+    }
+
+    #acard .back {
+        background: #ffe49e;
+        transform: rotateX(180deg);
+    }
+
+    #acard.flipped {
+        transform: rotateY(180deg) rotateZ(0deg) rotateZ(180deg);
+    }
+
+
+
+
+
+    #doorcard {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        transition: transform 1s;
+        transform-origin: right center;
+    }
+
+    #doorcard div {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    #doorcard .front {
+        background: #ff9e9e;
+    }
+
+    #doorcard .back {
+        background: #ff9e9e;
+        transform: rotateY(180deg);
+    }
+
+    #doorcard.flipped {
+        transform: rotateY(180deg);
+    }
+
+
+
+
+
+    #spincard {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        transition: transform 1s;
+        transform-origin: right center;
+    }
+
+    #spincard div {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    #spincard .front {
+        background: #9effad;
+    }
+
+    #spincard .back {
+        background: #9effad;
+        transform: rotateX(180deg);
+    }
+
+    #spincard.flipped {
+        transform: rotateX(-180deg);
+    }
+
+    .flipcard {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        transition: transform 1s;
+        transform-origin: right center;
+    }
+
+    .flipcard div {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .flipcard.front {
+        background: #9cceff;
+        vertical-align: middle;
+    }
+
+    .flipcard .back {
+        background: #9cceff;
+        transform: rotateY(180deg);
+    }
+
+    .flipcard.flipped {
+        transform: translateX(-100%) rotateY(-180deg);
     }
 </style>
 
 <body>
     <div class="container">
         <div x-data="questions">
-            <div class="grid">
+            <div style="display: flex;">
                 <template x-for="q in questions" :key="q.id">
-                    <div>
-                        <article>
-                            <header class="category">
+                    <div x-data="{ isFlipped: false }">
+                        <div class="flipcard" @click="isFlipped = !isFlipped" :class="isFlipped ? 'flipped' :''">
+                            <!-- <header class="category">
                                 <strong x-text="q.category"></strong>
-                            </header>
-                            <blockquote>
+                            </header> -->
+                            <div class="front">
+                                <em x-text="q.category"></em>
+                            </div>
+                            <div class="back">
                                 <em x-text="q.question"></em>
-                            </blockquote>
-                        </article>
-                    </div>
+                            </div>
+                            </article>
+                        </div>
                 </template>
             </div>
             <div>
@@ -71,7 +182,7 @@
             </div>
         </div>
 
-    </div>
+    </div>night
 </body>
 
 </html>
